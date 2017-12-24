@@ -1,0 +1,75 @@
+%YAML 1.2
+---
+# Duckyscript syntax definition for Sublime Text 3
+# https://github.com/hak5darren/USB-Rubber-Ducky/wiki/Duckyscript
+file_extensions:
+  - txt
+scope: source.duckyscript
+contexts:
+  main:
+    # String
+    - match: '^STRING'
+      scope: punctuation.definition.string.begin.duckyscript
+      push: unquoted_string
+
+    # Comment
+    - match: '^REM'
+      scope: punctuation.definition.comment.duckyscript
+      push: line_comment
+
+    # Functions
+    - match: '^(DELAY|DEFAULT_DELAY|DEFAULTDELAY|REPEAT) '
+      scope: entity.name.function.duckyscript
+      push: numeric
+    
+    # WINDOWS or GUI
+    - match: '^(GUI|WINDOWS)[ ]?'
+      scope: constant.character.duckyscript
+      push: char
+
+    # MENU or APP
+    - match: '^(MENU|APP)$'
+      scope: constant.character.duckyscript
+
+    # SHIFT
+    - match: '^SHIFT[ ]?(DELETE|HOME|INSERT|PAGEUP|PAGEDOWN|WINDOWS|GUI|UPARROW|DOWNARROW|LEFTARROW|RIGHTARROW|TAB|)$'
+      scope: constant.character.duckyscript
+
+    # ALT
+    - match: '^ALT[ ]?(END|ESC|ESCAPE|SPACE|TAB|F(1[0-2]|[1-9])|\w|)$'
+      scope: constant.character.duckyscript
+
+    # CONTROL or CTRL
+    - match: '^(CONTROL|CTRL)[ ]?(BREAK|PAUSE|ESCAPE|ESC|F(1[0-2]|[1-9])|\w|)$'
+      scope: constant.character.duckyscript
+
+    # Keys
+    - match: '^(ENTER|DOWNARROW|DOWN|LEFTARROW|LEFT|RIGHTARROW|RIGHT|UPARROW|UP|BREAK|PAUSE|CAPSLOCK|DELETE|END|ESC|ESCAPE|HOME|INSERT|NUMLOCK|PAGEUP|PAGEDOWN|PRINTSCREEN|SCROLLLOCK|SPACE|TAB)$'
+      scope: constant.character.duckyscript
+
+  char:
+    - meta_scope: variable.duckyscript
+    - match: '\w$'
+      scope: constant.character.duckyscript
+    - match: $
+      pop: true
+
+  numeric:
+    - meta_scope: constant.duckyscript
+    - match: '\d+$'
+      scope: constant.numeric.duckyscript
+    - match: $
+      pop: true
+
+  unquoted_string:
+    - meta_scope: string.unquoted.duckyscript
+    - match: '\\.'
+      scope: constant.character.duckyscript
+    - match: $
+      scope: punctuation.definition.string.end.duckyscript
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line.duckyscript
+    - match: $
+      pop: true
